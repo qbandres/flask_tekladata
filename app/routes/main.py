@@ -47,16 +47,21 @@ def main():
     script1, div1, script2, div2, script3, div3 = generate_graph_data()
     
     # Inicializar variables
-    search_main_table = None
+    search_main_table = []  # Inicializar como lista vacía
 
     if request.method == 'POST':
-        # Procesar búsqueda si hay una
-        consulta_main = ConsultaMain()
-        search_type = request.form['search_type_main']
-        search_filter = request.form['search_filter_main']
-        search_main_table = consulta_main.regular_fetchall(f"SELECT * FROM tekladata WHERE {search_type} LIKE %s", (f"%{search_filter}%",))
-        print(search_main_table)
+        try:
+            # Procesar búsqueda si hay una
+            consulta_main = ConsultaMain()
+            search_type = request.form['search_type_main']
+            search_filter = request.form['search_filter_main']
+            search_main_table = consulta_main.regular_fetchall(f"SELECT * FROM tekladata WHERE {search_type} LIKE %s", (f"%{search_filter}%",))
+            print(search_main_table)
+        except Exception as e:
+            print(f"Ocurrió un error: {e}")
+            search_main_table = []  # Asigna una lista vacía en caso de error
 
     return render_template('main.html', script1=script1, div1=div1, script2=script2, div2=div2, script3=script3, div3=div3, search_main_table=search_main_table)
+
 
 # No necesitas una ruta separada para /procesar_busqueda ya que /main maneja ambos GET y POST

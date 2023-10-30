@@ -32,8 +32,9 @@
                 </div>
             </div>
 
-            <button class="option">Opción 3</button>
-            <button class="option">Opción 4</button>
+            <a href="{{ url_for('anadir_elemento') }}" class="btn">Añadir Items</a>
+            <a href="{{ url_for('agregar_montaje') }}" class="btn">Actualizar Montaje</a>
+            <a href="{{ url_for('download_excel') }}" class="btn">Descargar Excel</a>
         </div>
     </header>
 
@@ -57,11 +58,12 @@
             <form class="container" id="searchForm" method="post">
                 <select id="searchTypeMain" name="search_type_main">
                     <option value="ID">ID</option>
-                    <option value="PIECEMARK">PIECEMARK</option>
+                    <option value="PIECEMARK" selected>PIECEMARK</option>
                     <option value="ESP">ESP</option>    
                     <option value="CLASS">CLASS</option>
                     <option value="ZONA">ZONA</option>
                 </select>
+                
                 <input type="text" id="searchFilterMain" name="search_filter_main" placeholder="Buscar...">
                 <button class="btn" type="submit">Buscar</button>
             </form>

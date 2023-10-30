@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Botón para volver a /main -->
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <a href="/main">    
+            <button class="btn">Principal</button>
+        </a>
+    </div>
+        
+    <div id="ListContainer"></div>
+
+    <h3>Listado para editar</h3>
+    <form id="searchForm">
+        <input type="text" id="piecemarkFilter" name="search_filter" placeholder="Buscar por PIECEMARK">
+        <button class="btn" type="submit">Buscar</button>
+    </form>
+
+    <table id="searchResultsTable" class="bordered-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>PIECEMARK</th>
+                <th>ESP</th>
+                <th>LINEA</th>
+                <th>CLASS</th>
+                <th>QTY</th>
+                <th>WEIGHT</th>
+                <th>RATIO</th>
+                <th>ZONA</th>
+                <th>TRASLADO</th>
+                <th>PRE_ENSAMBLE</th>
+                <th>MONTAJE</th>
+                <th>TORQUE</th>
+                <th>PUNCH</th>
+                <th>ACCIÓN</th>
+            </tr>
+        </thead>
+        <tbody id="searchResults"></tbody>
+    </table>
+
+    <div id="editListContainer">
+        <h3>Listado de items editados</h3>
+        <table id="editListTable" class="bordered-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PIECEMARK</th>
+                    <th>ESP</th>
+                    <th>LINEA</th>
+                    <th>CLASS</th>
+                    <th>QTY</th>
+                    <th>WEIGHT</th>
+                    <th>RATIO</th>
+                    <th>ZONA</th>
+                    <th>TRASLADO</th>
+                    <th>PRE_ENSAMBLE</th>
+                    <th>MONTAJE</th>
+                    <th>TORQUE</th>
+                    <th>PUNCH</th>
+                    <th>ACCION</th>
+                </tr>
+            </thead>
+            <tbody id="editList"></tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var editListSet = new Set();
+
+            $('#searchResults').on('change', 'input', function() {
+                $(this).closest('tr').find('.modify-btn').prop('disabled', false);
+            });
+
+            $('#searchResults').on('click', '.modify-btn', function () {
+                var row = $(this).closest('tr');
+                var dataToUpdate = {
+                    id: row.data('id'),
+                    traslado: row.find('.traslado-input').val() || null,
+                    preEnsamble: row.find('.preEnsamble-input').val() || null,
+                    montaje: row.find('.montaje-input').val() || null,
+                    torque: row.find('.torque-input').val() || null,
+                    punch: row.find('.punch-input').val() || null
+                };
+
+
+                $.post("/actualizar_montaje", dataToUpdate, function (response) {
+                    if (response.success) {
+                        var clonedRow = row.clone();
+                        clonedRow.find('input').each(function () {
+                            var value = $(this).val();
+                            $(this).replaceWith(value);
+                        });
+                        var deleteButton = '<button class="remove-row" data-id="' + clonedRow.data('id') + '">Eliminar</button>';
+                        clonedRow.find('.modify-btn').replaceWith(deleteButton);
+
+                        if(editListSet.has(dataToUpdate.id)) {
+                            $('#editList').find('tr[data-id="' + dataToUpdate.id + '"]').replaceWith(clonedRow);
+                        } else {
+                            $('#editList').append(clonedRow);
+                            editListSet.add(dataToUpdate.id);
+                        }
+
+                        $('#editListContainer').show();
+                    } else {
+                        alert("Error al actualizar el item.");
+                    }
+                });
+            });
+
+            $('#editList').on('click', '.remove-row', function () {
+                var rowId = $(this).data('id');
+                editListSet.delete(rowId);
+                $(this).closest('tr').remove();
+            });
+
+            // $('#saveChanges').click(function () {
+            //     $('#editListContainer').hide();
+            // });
+
+            function formatDate(dateString) {
+                if (!dateString || dateString === '0000-00-00') { // Añadir aquí condiciones para cualquier otro formato de fecha inválido según tus necesidades
+                    return '';
+                }
+
+    var date = new Date(dateString);
+    return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0];
+}
+
+
+            $('#searchForm').submit(function (event) {
+                event.preventDefault();
+                var filter = $('#piecemarkFilter').val();
+                $.post("/procesar_busqueda", { search_filter: filter }, function (data) {
+                    $('#searchResultsTable').show();
+                    $('#searchResults').empty();
+                    data.search_results.forEach(function (row) {
+                        var traslado = formatDate(row.TRASLADO);
+                        var preEnsamble = formatDate(row.PRE_ENSAMBLE);
+                        var montaje = formatDate(row.MONTAJE);
+                        var torque = formatDate(row.TORQUE);
+                        var punch = formatDate(row.PUNCH);
+
+                        var rowHtml =
+                            '<tr data-id="' + row.ID + '">' +
+                            '<td>' + row.ID + '</td>' +
+                            '<td>' + row.PIECEMARK + '</td>' +
+                            '<td>' + row.ESP + '</td>' +
+                            '<td>' + row.LINEA + '</td>' +
+                            '<td>' + row.CLASS + '</td>' +
+                            '<td>' + row.QTY + '</td>' +    
+                            '<td>' + row.WEIGHT + '</td>' +
+                            '<td>' + row.RATIO + '</td>' +
+                            '<td>' + row.ZONA + '</td>' +
+                            '<td><input type="date" class="traslado-input" value="' + traslado + '"></td>' +
+                            '<td><input type="date" class="preEnsamble-input" value="' + preEnsamble + '"></td>' +
+                            '<td><input type="date" class="montaje-input" value="' + montaje + '"></td>' +
+                            '<td><input type="date" class="torque-input" value="' + torque + '"></td>' +
+                            '<td><input type="date" class="punch-input" value="' + punch + '"></td>' +
+                            '<td><button class="modify-btn" disabled>Modificar</button></td>' +
+                            '</tr>';
+                        $('#searchResults').append(rowHtml);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <!-- Botón para volver a /main -->
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <a href="/main">    
+            <button class="btn">Principal</button>
+        </a>
+    </div>
+
+    <div class="container">
+        <h2>Añadir Nuevo Elemento</h2>
+        <form action="{{ url_for('anadir_elemento') }}" method="post" id="elementosForm">
+            <div class="elemento">
+                <input type="number" placeholder="ID" name="ID[]">
+                <input type="text" placeholder="PIECEMARK" name="PIECEMARK[]" maxlength="15">
+                <input type="text" placeholder="ESP" name="ESP[]" maxlength="12">
+                <select name="LINEA[]">
+                    <option value="L1">L1</option>
+                    <option value="L2">L2</option>
+                </select>
+                <select name="CLASS[]">
+                    <option value="Extra Pesada">Extra Pesada</option>
+                    <option value="Pesada">Pesada</option>
+                    <option value="Mediana">Mediana</option>
+                    <option value="Liviana">Liviana</option>
+                    <option value="Handrail with Toe plate">Handrail with Toe plate</option>
+                    <option value="Grating">Grating</option>
+                    <option value="Platform Frameworks">Platform Frameworks</option>
+                    <option value="Stair Treads">Stair Treads</option>
+                    <option value="Roofing Trusses">Roofing Trusses</option>
+                    <option value="plateholdes">plateholdes</option>
+                </select>
+                <input type="number" placeholder="QTY" name="QTY[]">
+                <input type="number" placeholder="WEIGHT (Kg)" name="WEIGHT[]" step="0.01">
+                <input type="number" placeholder="RATIO" name="RATIO[]" step="0.01">
+                <input type="text" placeholder="ZONA" name="ZONA[]" maxlength="15">
+                <button type="button" class="remove">-</button>
+            </div>
+            <button type="button" id="agregar">+</button>
+            <button class="btn" type="submit">Guardar</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#agregar').on('click', function(){
+                const nuevoElemento = `
+                <div class="elemento">
+                    <input type="number" placeholder="ID" name="ID[]">
+                    <input type="text" placeholder="PIECEMARK" name="PIECEMARK[]" maxlength="15">
+                    <input type="text" placeholder="ESP" name="ESP[]" maxlength="12">
+                    <select name="LINEA[]">
+                        <option value="L1">L1</option>
+                        <option value="L2">L2</option>
+                    </select>
+                    <select name="CLASS[]">
+                        <option value="Extra Pesada">Extra Pesada</option>
+                        <option value="Pesada">Pesada</option>
+                        <option value="Mediana">Mediana</option>
+                        <option value="Liviana">Liviana</option>
+                        <option value="Handrail with Toe plate">Handrail with Toe plate</option>
+                        <option value="Grating">Grating</option>
+                        <option value="Platform Frameworks">Platform Frameworks</option>
+                        <option value="Stair Treads">Stair Treads</option>
+                        <option value="Roofing Trusses">Roofing Trusses</option>
+                        <option value="plateholdes">plateholdes</option>
+                    </select>
+                    <input type="number" placeholder="QTY" name="QTY[]">
+                    <input type="number" placeholder="WEIGHT (Kg)" name="WEIGHT[]" step="0.01">
+                    <input type="number" placeholder="RATIO" name="RATIO[]" step="0.01">
+                    <input type="text" placeholder="ZONA" name="ZONA[]" maxlength="15">
+                    <button type="button" class="remove">-</button>
+                </div>`;
+    
+    $(nuevoElemento).insertBefore('#agregar');
+});
+
+        });
+    </script>
+
+</body>
+</html>

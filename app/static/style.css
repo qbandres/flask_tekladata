@@ -140,3 +140,22 @@ th, td {
 }
 
 /* ... Resto de tus estilos ... */
+
+.btn {
+    /* estilos actuales */
+    display: inline-block;
+    background-color: #0b2d5b;
+    color: white;
+    padding: .375rem .75rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    text-decoration: none; /* elimina el subrayado de los enlaces */
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* animaciones suaves */
+}
+
+.btn:hover {
+    background-color: #1a4a8f; /* un azul ligeramente más claro para el efecto hover */
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2); /* añade una sombra para resaltar */
+    /* transform: scale(1.05); #hace el botón un poco más grande al pasar el cursor */
+}
