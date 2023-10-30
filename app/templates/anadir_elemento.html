@@ -78,8 +78,12 @@
                     <button type="button" class="remove">-</button>
                 </div>`;
     
-    $(nuevoElemento).insertBefore('#agregar');
-});
+                $(nuevoElemento).insertBefore('#agregar');
+            });
+            // Delegación de eventos para los botones de eliminar añadidos dinámicamente
+            $('body').on('click', '.remove', function(){
+                $(this).closest('.elemento').remove(); // Elimina el div padre más cercano con la clase .elemento
+            });
 
         });
     </script>
