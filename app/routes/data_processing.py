@@ -13,7 +13,7 @@ class DataFrameTransformer:
         # Reemplazar '' con NaN para manejarlos de manera uniforme
         df.replace('', pd.NA, inplace=True)
         df = df.dropna(subset=['y'])
-        
+
 
         df['y'] = df.y/factor
 

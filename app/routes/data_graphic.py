@@ -103,7 +103,7 @@ class BokehGraph:
         script, div = components(p)
         return script, div
     
-    def bar_chart(self, data, fi, ff, ymax, name_x, name_y, title):
+    def bar_chartMes(self, data, fi, ff, ymax, name_x, name_y, title):
         
         # Convertir 'x' a datetime y luego a formato año-mes
         data['x'] = pd.to_datetime(data['x']).dt.to_period('M').dt.to_timestamp()
@@ -134,6 +134,47 @@ class BokehGraph:
         
         # Ajustar el ancho de la barra para un mes aproximado
         bar_width = 30 * 24 * 60 * 60 * 1000  # ancho en milisegundos para un mes aproximado
+        p.vbar(x='x', top='y', width=bar_width, source=source, color="navy", alpha=0.5)
+
+        # Añadir una herramienta de hover para mostrar información detallada
+        hover = HoverTool()
+        hover.tooltips = [
+            ('Fecha de Montaje', "@x{%F}"),
+            ('Peso', '@y')
+        ]
+        hover.formatters = {'@x': 'datetime'}
+        p.add_tools(hover)
+
+        
+        # Devolver el script y el div
+        script, div = components(p)
+        return script, div
+    
+    def bar_chartDia(self, data, fi, ff, ymax, name_x, name_y, title):
+        
+        # Convertir el DataFrame a ColumnDataSource para Bokeh
+        source = ColumnDataSource(data)
+
+        # Define los rangos para cada eje
+        x_start = pd.to_datetime(fi)
+        x_end = pd.to_datetime(ff)
+        y_start = 0
+        y_end = ymax
+
+        # Crear un gráfico...
+        p = figure(title=title, 
+                x_axis_label=name_x, 
+                y_axis_label=name_y,
+                x_axis_type='datetime',
+                x_range=Range1d(x_start, x_end),
+                y_range=Range1d(y_start, y_end),
+                sizing_mode="stretch_both")
+        
+        # Alinear el título a la izquierda
+        p.title.align = "right"
+        
+        # Ajustar el ancho de la barra para un mes aproximado
+        bar_width = 24 * 60 * 60 * 1000  # ancho en milisegundos para un mes aproximado
         p.vbar(x='x', top='y', width=bar_width, source=source, color="navy", alpha=0.5)
 
         # Añadir una herramienta de hover para mostrar información detallada

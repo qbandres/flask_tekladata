@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Página con Botones Desplegables</title>
+    <title>Dashboard - Main</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
     <!-- Importar las librerías de Bokeh -->
@@ -14,7 +14,7 @@
 </head>
 <body>
     <header>
-        <h1>Mi Título</h1>
+        <h1>DahsBoard - Estructuras</h1>
         <div class="dropdowns-container">
             <div class="dropdown-container">
                 <button class="dropbtn">Opción 1</button>
@@ -39,29 +39,79 @@
 
     <section class="content">
         <div class="chart" id="chart1">
-
             {{script1 | safe}}
             {{div1 | safe}}
-            
         </div>
         <div class="chart" id="chart2">   
-
             {{script2 | safe}}
             {{div2 | safe}}
-        
         </div>
-
-        <div class="chart" id="chart3">   
-
+        <div class="chart" id="chart3">
             {{script3|safe}}
             {{div3|safe}}
-        
         </div>
-    
     </section>
 
-    <!-- Tu contenido aquí -->
-    <script src="script.js"></script>
+    <div class="main-content">
+        <section class="search-section">
+            <form class="container" id="searchForm" method="post">
+                <select id="searchTypeMain" name="search_type_main">
+                    <option value="ID">ID</option>
+                    <option value="PIECEMARK">PIECEMARK</option>
+                    <option value="ESP">ESP</option>    
+                    <option value="CLASS">CLASS</option>
+                    <option value="ZONA">ZONA</option>
+                </select>
+                <input type="text" id="searchFilterMain" name="search_filter_main" placeholder="Buscar...">
+                <button class="btn" type="submit">Buscar</button>
+            </form>
+        </section>
+    
+        <section class="table-section">
+            <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>PIECEMARK</th>
+                    <th>ESP</th>
+                    <th>LINEA</th>
+                    <th>CLASS</th>
+                    <th>QTY</th>
+                    <th>WEIGHT</th>
+                    <th>RATIO</th>
+                    <th>ZONA</th>
+                    <th>TRASLADO</th>
+                    <th>PRE_ENSAMBLE</th>
+                    <th>MONTAJE</th>
+                    <th>TORQUE</th>
+                    <th>PUNCH</th>
+                    <!-- Añade más encabezados de columna según tus datos -->
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for row in search_main_table %}
+                    <tr>
+                      <td>{{ row[0] }}</td> <!-- ID -->
+                      <td>{{ row[1] }}</td> <!-- PIECEMARK -->
+                      <td>{{ row[2] }}</td> <!-- ESP -->
+                      <td>{{ row[3] }}</td> <!-- LINEA -->
+                      <td>{{ row[4] }}</td> <!-- CLASS -->
+                      <td>{{ row[5] }}</td> <!-- QTY -->
+                      <td>{{ row[6] }}</td> <!-- WEIGHT -->
+                      <td>{{ row[7] }}</td> <!-- RATIO -->
+                      <td>{{ row[8] }}</td> <!-- ZONA -->
+                      <td>{{ row[9] }}</td> <!-- TRASLADO -->
+                      <td>{{ row[10] }}</td> <!-- PRE_ENSAMBLE -->
+                      <td>{{ row[11] }}</td> <!-- MONTAJE -->
+                      <td>{{ row[12] }}</td> <!-- TORQUE -->
+                      <td>{{ row[13] }}</td> <!-- PUNCH -->
+                      <!-- Repite para cada columna adicional -->
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </section>
+    </div>
 </body>
 </html>
 

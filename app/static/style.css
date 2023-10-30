@@ -1,66 +1,78 @@
+/* Establece una fuente predeterminada para todo el texto en el cuerpo de la página */
 body {
     font-family: Arial, sans-serif;
 }
 
+/* Estilo del encabezado con un diseño flexible, fondo oscuro y elementos centrados */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    padding: 10px;
+    display: flex; /* Usa Flexbox para el diseño */
+    justify-content: space-between; /* Distribuye los elementos del menú y el título */
+    align-items: center; /* Centra verticalmente los elementos en el encabezado */
+    background-color: #333; /* Fondo oscuro para el encabezado */
+    color: white; /* Color de texto blanco */
+    padding: 10px; /* Relleno alrededor del encabezado */
 }
 
+/* Estilo del título del encabezado, eliminando el margen predeterminado */
 h1 {
-    margin: 0;
+    margin: 0; /* Elimina el margen predeterminado para controlar el espaciado */
 }
 
+/* Contenedor para menús desplegables, usando Flexbox para la alineación */
 .dropdowns-container {
-    display: flex;
-    align-items: center;
+    display: flex; /* Flexbox para alinear desplegables horizontalmente */
+    align-items: center; /* Centra verticalmente los desplegables */
 }
 
+/* Estilo para el contenedor de cada menú desplegable */
 .dropdown-container {
-    position: relative;
-    display: inline-block;
+    position: relative; /* Posicionamiento relativo para el posicionamiento absoluto del contenido desplegable */
+    display: inline-block; /* Permite que los desplegables se ubiquen en línea con otros elementos */
 }
 
+/* Estilo genérico para botones desplegables y opciones */
 .dropbtn, .option {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
+    background-color: #333; /* Fondo oscuro para botones */
+    color: white; /* Color de texto blanco */
+    padding: 10px; /* Relleno para el área clickeable */
+    font-size: 16px; /* Tamaño del texto */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor en forma de puntero al pasar el ratón */
 }
 
+/* Contenido desplegable oculto, mostrado al pasar el ratón */
 .dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    display: none; /* Oculto por defecto */
+    position: absolute; /* Posicionado de manera absoluta en relación a su padre */
+    right: 0; /* Alineado al lado derecho del contenedor desplegable */
+    background-color: #f9f9f9; /* Fondo claro para el contenido desplegable */
+    min-width: 160px; /* Ancho mínimo del contenido desplegable */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Sombra para efecto 3D */
+    z-index: 1; /* Asegura que el contenido desplegable aparezca sobre otros contenidos */
 }
 
+/* Estilo para enlaces dentro del desplegable */
 .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+    color: black; /* Color de texto negro para legibilidad */
+    padding: 12px 16px; /* Relleno para clics más fáciles */
+    text-decoration: none; /* Sin subrayado para enlaces */
+    display: block; /* Mostrado como bloque para área de clic de ancho completo */
 }
 
+/* Estilo para enlaces desplegables al pasar el ratón */
 .dropdown-content a:hover {background-color: #f1f1f1;}
 
+/* Muestra el contenido desplegable cuando se pasa el ratón sobre el contenedor */
 .dropdown-container:hover .dropdown-content {
-    display: block}
+    display: block; /* Muestra el contenido desplegable */
+}
+
 
 /* Estilo para separar los header de la seccion */
 .content {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px; /* Añade un margen superior de 20px */
+    margin-top: 40px; /* Añade un margen superior de 20px */
     /* Resto de tus estilos */
 }
 
@@ -89,4 +101,42 @@ h1 {
     height: 100%; /* Los div de Bokeh deben ocupar toda la altura disponible */
 }
 
+/* Estilo para separar los header de la seccion */
+.search-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px; /* Añade un margen superior de 20px */
+    /* Resto de tus estilos */
+}
 
+/* ... otros estilos de header, dropdown, etc. ... */
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.search-section {
+    width: 80%; /* Ajusta según sea necesario */
+    margin-bottom: 20px;
+}
+
+.table-section {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+/* ... Resto de tus estilos ... */
