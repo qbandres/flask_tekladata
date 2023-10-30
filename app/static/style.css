@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+h1 {
+    margin: 0;
+}
+
+.dropdowns-container {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn, .option {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown-container:hover .dropdown-content {
+    display: block}
+
+/* Estilo para separar los header de la seccion */
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px; /* Añade un margen superior de 20px */
+    /* Resto de tus estilos */
+}
+
+/* Estilo para la sección que contiene los gráficos */
+.content {
+    display: flex; /* Uso de flexbox para un diseño flexible */
+    flex-wrap: wrap; /* Permite que los elementos se ajusten según el ancho disponible */
+    gap: 10px; /* Espacio entre gráficos */
+    align-items: stretch; /* Los elementos hijos se estiran para llenar el contenedor en altura */
+    justify-content: space-evenly; /* Distribución uniforme del espacio horizontal */
+}
+
+/* Estilo para cada gráfico individual */
+.chart {
+    flex: 1 1 calc(33.33% - 20px); /* Cada gráfico ocupa un tercio del espacio disponible, ajustando para el espacio entre gráficos */
+    display: flex; /* Uso de flexbox dentro de cada gráfico */
+    flex-direction: column; /* Organización vertical de los elementos internos */
+    justify-content: center; /* Centrado vertical de los elementos internos */
+    align-items: center; /* Centrado horizontal de los elementos internos */
+    min-height: 300px; /* Altura mínima para cada gráfico */
+}
+
+/* Asegurándose de que los elementos de Bokeh se expandan para llenar el .chart */
+.chart > div {
+    width: 100%; /* Los div de Bokeh deben ocupar todo el ancho disponible */
+    height: 100%; /* Los div de Bokeh deben ocupar toda la altura disponible */
+}
+
+
