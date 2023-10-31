@@ -3,6 +3,6 @@ venv/
 *.xls
 *.csv
 *.pdf
-.env
+# .env
 __pycache__
 instance/
