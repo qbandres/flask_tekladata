@@ -75,14 +75,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Crear un conjunto para almacenar las identificaciones de las filas que han sido editadas
             var editListSet = new Set();
 
+            // Escuchar el evento 'change' en los inputs dentro de '#searchResults'
+            // y habilitar el botón de modificar en la misma fila
             $('#searchResults').on('change', 'input', function() {
                 $(this).closest('tr').find('.modify-btn').prop('disabled', false);
             });
 
+            // Escuchar el evento 'click' en el botón de modificar y actualizar la fila correspondiente
             $('#searchResults').on('click', '.modify-btn', function () {
+                // Obtener la fila ('tr') más cercana al botón presionado
                 var row = $(this).closest('tr');
+
+                // Recoger los datos de la fila para enviarlos en la petición
                 var dataToUpdate = {
                     id: row.data('id'),
                     traslado: row.find('.traslado-input').val() || null,
@@ -92,17 +99,22 @@
                     punch: row.find('.punch-input').val() || null
                 };
 
-
+                // Enviar los datos al servidor mediante una petición POST
                 $.post("/actualizar_montaje", dataToUpdate, function (response) {
                     if (response.success) {
+
+                        // Clonar la fila y sustituir los inputs por sus valores
                         var clonedRow = row.clone();
                         clonedRow.find('input').each(function () {
                             var value = $(this).val();
                             $(this).replaceWith(value);
                         });
+
+                        // Reemplazar el botón de modificar por un botón de eliminar
                         var deleteButton = '<button class="remove-row" data-id="' + clonedRow.data('id') + '">Eliminar</button>';
                         clonedRow.find('.modify-btn').replaceWith(deleteButton);
 
+                        // Agregar la fila clonada y actualizada al listado de filas editadas
                         if(editListSet.has(dataToUpdate.id)) {
                             $('#editList').find('tr[data-id="' + dataToUpdate.id + '"]').replaceWith(clonedRow);
                         } else {
@@ -110,6 +122,7 @@
                             editListSet.add(dataToUpdate.id);
                         }
 
+                        // Mostrar el contenedor con el listado de filas editadas
                         $('#editListContainer').show();
                     } else {
                         alert("Error al actualizar el item.");
@@ -117,32 +130,34 @@
                 });
             });
 
+            // Escuchar el evento 'click' en el botón de eliminar y eliminar la fila del listado de editados
             $('#editList').on('click', '.remove-row', function () {
                 var rowId = $(this).data('id');
                 editListSet.delete(rowId);
                 $(this).closest('tr').remove();
             });
 
-            // $('#saveChanges').click(function () {
-            //     $('#editListContainer').hide();
-            // });
-
+            // Función para formatear fechas
             function formatDate(dateString) {
                 if (!dateString || dateString === '0000-00-00') { // Añadir aquí condiciones para cualquier otro formato de fecha inválido según tus necesidades
                     return '';
                 }
 
-    var date = new Date(dateString);
-    return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0];
-}
+                var date = new Date(dateString);
+                return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0];
+            }
 
-
+            // Escuchar el evento de envío del formulario de búsqueda y enviar una petición POST
             $('#searchForm').submit(function (event) {
                 event.preventDefault();
                 var filter = $('#piecemarkFilter').val();
-                $.post("/procesar_busqueda", { search_filter: filter }, function (data) {
+                $.post("/procesar_busqueda_actualizar", { search_filter: filter }, function (data) {
+
+                    // Mostrar la tabla de resultados y limpiar los resultados anteriores
                     $('#searchResultsTable').show();
                     $('#searchResults').empty();
+
+                    // Agregar las filas de resultado a la tabla
                     data.search_results.forEach(function (row) {
                         var traslado = formatDate(row.TRASLADO);
                         var preEnsamble = formatDate(row.PRE_ENSAMBLE);

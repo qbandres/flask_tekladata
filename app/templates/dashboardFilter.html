@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Página</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Importar las librerías de Bokeh -->
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js"></script>
+</head>
+<body>
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <a href="/main">    
+            <button class="btn">Principal</button>
+        </a>
+    </div>
+    <div class="container">
+        <h1>Gráficos según filtros</h1>
+        <div class="graficos-filtros">
+            <div id="grafico1" class="chart">
+                {{scriptBrut|safe}}
+                {{divBrut|safe}}
+            </div>
+            <div id="grafico2" class="chart">Montaje Ponderado</div>
+            <div id="grafico3" class="grafico">Avance por quiebre</div>
+
+            <form action="{{ url_for('graphic_dash') }}" method="post" id="form-filtros-busqueda">
+                <div id="filtros">
+                    <!-- Desplegable con casillas de verificación para "ESP" -->
+                    <div class="dropdown-check-list" tabindex="100">
+                        <span class="anchor">Esp</span>
+                        <ul class="items">
+                            <li>
+                                <input type="checkbox" id="select_all_esp" />
+                                <label for="select_all">Seleccionar todas</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="select_none_esp" />
+                                <label for="select_none">Seleccionar ninguna</label>
+                            </li>
+                            {% for esp in esp_s %}
+                            <li>
+                                <input type="checkbox" name="esp" value="{{ esp }}" id="esp_{{ loop.index }}" checked/>
+                                <label for="esp_{{ loop.index }}">{{ esp }}</label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Desplegable con casillas de verificación para "linea" -->
+                    <div class="dropdown-check-list" tabindex="100">
+                        <span class="anchor">Linea</span>
+                        <ul class="items">
+                            <li>
+                                <input type="checkbox" id="select_all_linea" />
+                                <label for="select_all">Seleccionar todas</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="select_none_linea" />
+                                <label for="select_none">Seleccionar ninguna</label>
+                            </li>
+                            {% for linea in linea_s %}
+                            <li>
+                                <input type="checkbox" name="linea" value="{{ linea }}" id="linea_{{ loop.index }}" checked/>
+                                <label for="linea_{{ loop.index }}">{{ linea }}</label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Desplegable con casillas de verificación para "linea" -->
+                    <div class="dropdown-check-list" tabindex="100">
+                        <span class="anchor">Clase</span>
+                        <ul class="items">
+                            <li>
+                                <input type="checkbox" id="select_all_class" />
+                                <label for="select_all">Seleccionar todas</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="select_none_class" />
+                                <label for="select_none">Seleccionar ninguna</label>
+                            </li>
+                            {% for class in class_s %}
+                            <li>
+                                <input type="checkbox" name="class" value="{{ class }}" id="class_{{ loop.index }}" checked/>
+                                <label for="class_{{ loop.index }}">{{ class }}</label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Desplegable con casillas de verificación para "Zona" -->
+                    <div class="dropdown-check-list" tabindex="100">
+                        <span class="anchor">Zona</span>
+                        <ul class="items">
+                            <li>
+                                <input type="checkbox" id="select_all_zona" />
+                                <label for="select_all">Seleccionar todas</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="select_none_zona" />
+                                <label for="select_none">Seleccionar ninguna</label>
+                            </li>
+                            {% for zona in zona_s %}
+                            <li>
+                                <input type="checkbox" name="zona" value="{{ zona }}" id="zona_{{ loop.index }}" checked/>
+                                <label for="zona_{{ loop.index }}">{{ zona }}</label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+    
+                    <label for="fecha-inicial">Fecha Inicial:</label>
+                    <input type="date" id="fecha-inicial" name="fecha-inicial" value="2019-10-01">
+                    
+                    <label for="fecha-final">Fecha Final:</label>
+                    <input type="date" id="fecha-final" name="fecha-final" value="2023-04-30">
+                    <!-- Botón de envío usando la etiqueta button -->
+                    <button type="submit">Graficar</button>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="tablas">
+            <table id="tablezona">
+                <tr><th>Tabla Zona</th></tr>
+            </table>
+            <table id="tablediario">
+                <tr><th>Tabla Diario</th></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Script para manejar la lógica del desplegable
+        document.addEventListener('click', function (e) {
+            var target = e.target;
+            if (target.classList.contains('anchor')) {
+                // Cerrar todos los desplegables primero
+                var allDropdowns = document.querySelectorAll('.items');
+                allDropdowns.forEach(function (dd) {
+                    if (dd !== target.nextElementSibling) {
+                        dd.classList.remove('visible');
+                    }
+                });
+                // Abrir el desplegable seleccionado
+                var dropdown = target.nextElementSibling;
+                dropdown.classList.toggle('visible');
+                e.stopPropagation();
+            }
+        });
+  
+        // Cerrar el menú desplegable si el usuario hace clic fuera de él
+        window.onclick = function(event) {
+            var dropdowns = document.querySelectorAll('.items');
+            dropdowns.forEach(function (dd) {
+                if (dd.classList.contains('visible')) {
+                    dd.classList.remove('visible');
+                }
+            });
+        };
+    
+        // Función para manejar "Seleccionar todas" y "Seleccionar ninguna"
+        function updateCheckboxes(checkboxes, checked) {
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = checked;
+            });
+        }
+    
+        // Lógica para manejar las selecciones de checkbox
+        document.addEventListener('DOMContentLoaded', function() {
+            // Función para inicializar los checkboxes de cada categoría
+            function initCategoryCheckboxes(category) {
+                var selectAllCheckbox = document.getElementById('select_all_' + category);
+                var selectNoneCheckbox = document.getElementById('select_none_' + category);
+                var categoryCheckboxes = document.querySelectorAll('input[name="' + category + '"]');
+                
+                selectAllCheckbox.addEventListener('change', function() {
+                    updateCheckboxes(categoryCheckboxes, true);
+                    selectNoneCheckbox.checked = false;
+                });
+    
+                selectNoneCheckbox.addEventListener('change', function() {
+                    updateCheckboxes(categoryCheckboxes, false);
+                    selectAllCheckbox.checked = false;
+                });
+    
+                categoryCheckboxes.forEach(function(checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        if (!this.checked) {
+                            selectAllCheckbox.checked = false;
+                        } else {
+                            var allChecked = Array.from(categoryCheckboxes).every(function(input) {
+                                return input.checked;
+                            });
+                            selectAllCheckbox.checked = allChecked;
+                        }
+                        selectNoneCheckbox.checked = false;
+                        event.stopPropagation();
+                    });
+                });
+            }
+    
+            // Inicializar los checkboxes para cada categoría
+            initCategoryCheckboxes('esp');
+            initCategoryCheckboxes('linea');
+            initCategoryCheckboxes('class');
+            initCategoryCheckboxes('zona');
+        });
+    
+        // Prevenir que el menú se cierre al hacer clic en los checkboxes
+        document.addEventListener('click', function(event) {
+            if (event.target.type === 'checkbox') {
+                event.stopPropagation();
+            }
+        }, true);
+    </script>
+   
+</body>
+</html>
+

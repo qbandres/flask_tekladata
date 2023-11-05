@@ -159,3 +159,139 @@ th, td {
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2); /* añade una sombra para resaltar */
     /* transform: scale(1.05); #hace el botón un poco más grande al pasar el cursor */
 }
+
+/* Ajuste para el dahs */
+
+.graficos-filtros {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.grafico {
+    width: 28%;
+    height: 300px; /* Ajusta según tus necesidades */
+    background-color: #f0f0f0; /* Color de fondo */
+    text-align: center;
+    line-height: 300px; /* Esto es para centrar el texto verticalmente, ajusta según la altura */
+}
+
+.tablas {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#tablezona, #tablediario {
+    border-collapse: collapse;
+}
+
+#tablezona {
+    width: 55%;
+    
+}
+
+#tablediario {
+    width: 25%;
+    margin-right: auto; /* Esto empuja la tabla zona hacia la derecha */
+    
+}
+
+table th, table td {
+    padding: 5px;
+}
+
+/* Estilos adicionales según necesidades */
+
+#form-filtros-busqueda {
+    display: flex;
+    flex-direction: column;
+    width: 16%;
+    background-color: #ddd;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#form-filtros-busqueda select, 
+#form-filtros-busqueda input[type="date"], 
+#form-filtros-busqueda label,
+#form-filtros-busqueda .dropdown-check-list {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#form-filtros-busqueda label {
+    text-align: left;
+    display: block;
+    margin-top: 10px;
+}
+
+.dropdown-check-list {
+    display: block; /* Asegura que cada dropdown ocupe su propia línea */
+    user-select: none;
+}
+
+.dropdown-check-list .anchor {
+    cursor: pointer;
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    font-weight: bold;
+    position: relative;
+}
+
+.dropdown-check-list .items {
+    display: none; /* Asegura que la lista de elementos no sea visible hasta que se haga clic */
+    position: static; /* Cambiado de absolute a static para seguir el flujo normal del documento */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    z-index: 100;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+.dropdown-check-list .items.visible {
+    display: block;
+}
+
+.dropdown-check-list ul.items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px; /* Mantiene la altura y el desplazamiento */
+    overflow-y: auto;
+}
+
+.dropdown-check-list ul.items li {
+    padding: 2px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-check-list ul.items li:not(:last-child) {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.dropdown-check-list ul.items li:hover {
+    background-color: #eaeaea;
+}
+
+.dropdown-check-list ul.items li label {
+    flex-grow: 1;
+    cursor: pointer;
+    margin: 0;
+}
+
+.dropdown-check-list ul.items li input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+input[type="date"] {
+    margin-bottom: 10px; /* Espacio adicional para separar los input de fecha */
+}
+
+
