@@ -15,6 +15,7 @@ def get_select_data():
     
     consulta_sql = ConsultaMain()
     bokehGraph = BokehGraph()
+    transform = DataFrameTransformer()
     
     esp_s = consulta_sql.regular_list('SELECT DISTINCT ESP FROM tekladata;')
     linea_s = consulta_sql.regular_list('SELECT DISTINCT LINEA FROM tekladata;')
@@ -25,7 +26,7 @@ def get_select_data():
 
     df_acum = consulta_sql.regular_df('SELECT * FROM tekladata')
 
-    transform = DataFrameTransformer()
+    
     brutoDiario,brutoAcum = transform.df_xy(df_acum,1000,'MONTAJE','WEIGHT')
 
     scriptBrut, divBrut = bokehGraph.linear(brutoAcum, '2019-10-01', '2023-03-30', 10000, 'Date', 'Ton', 'Montaje Acumulado Variación Linear')
