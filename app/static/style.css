@@ -1,3 +1,24 @@
+.flash-message {
+    position: fixed; /* Fixed relative to the viewport */
+    top: 20px; /* Positioned at the top of the page */
+    right: 20px; /* Positioned on the right side of the page */
+    z-index: 1000; /* Ensure it's on top of other content */
+    background-color: #f4f4f4; /* Light grey background */
+    border: 1px solid #ddd; /* Light grey border */
+    padding: 10px; /* Some padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* A slight shadow */
+    opacity: 0; /* Start invisible */
+    transition: opacity 0.5s ease-in-out; /* Transition for the fade in/out */
+  }
+  
+  .flash-message.error {
+    background-color: #d9534f; /* Red background for error messages */
+    color: white; /* White text color */
+  }
+  
+
+
 /* Establece una fuente predeterminada para todo el texto en el cuerpo de la página */
 body {
     font-family: Arial, sans-serif;

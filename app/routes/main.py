@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, url_for, request,Response
+from flask import render_template, session, redirect, url_for, request,Response,flash  
 from app import app,db_connection
 from .consulta_sql import ConsultaMain
 from .data_processing import DataFrameTransformer
@@ -60,8 +60,11 @@ def main():
             search_filter = request.form['search_filter_main']
             search_main_table = consulta_main.regular_fetchall(f"SELECT * FROM tekladata WHERE {search_type} LIKE %s", (f"%{search_filter}%",))
         except Exception as e:
-            # print(f"Ocurrió un error: {e}")
-            search_main_table = []  # Asigna una lista vacía en caso de error
+            # Aquí se captura la excepción general y se muestra un mensaje al usuario
+            # Deberías capturar excepciones más específicas según lo que pueda salir mal
+            flash(f"Ocurrió un error al procesar la búsqueda: {e}", 'error')
+            # Opcional: Registrar el error en un archivo de log o sistema de monitoreo
+            app.logger.error(f"Error en /main: {e}")
 
     return render_template('main.html', script1=script1, div1=div1, script2=script2, div2=div2, script3=script3, div3=div3, search_main_table=search_main_table)
 

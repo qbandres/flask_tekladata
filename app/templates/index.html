@@ -47,9 +47,32 @@
         button:hover {
             background-color: #0056b3;
         }
+        #flash-messages {
+        position: fixed; /* Se mantiene fijo en la pantalla */
+        top: 10px; /* Espacio desde la parte superior de la pantalla */
+        right: 10px; /* Espacio desde la parte derecha de la pantalla */
+        z-index: 9999; /* Asegura que esté por encima de otros elementos */
+        }
+
+        .alert {
+        display: inline-block;
+        margin: 0;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.25rem;
+        color: #ffffff;
+        background-color: #dc3545; /* Rojo para errores, pero puede ser personalizado */
+        border-color: #dc3545;
+        }
+
+        .alert:not(:last-child) {
+        margin-bottom: 10px; /* Espacio entre múltiples alertas */
+        }
+
+
     </style>
 </head>
 <body>
+
     <div>
         <h2>Login</h2>
         <form method="POST" action="/login">
@@ -58,5 +81,37 @@
             <button type="submit">Let me in.</button>
         </form>
     </div>
+    <!-- Flask Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-messages" style="position:fixed; top:10px; right:10px; z-index:9999;">
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <script>
+        // Espera a que se cargue la ventana antes de mostrar los mensajes flash
+        window.onload = function() {
+          // Obtiene todos los mensajes flash
+          var flashMessages = document.getElementById('flash-messages');
+          if (flashMessages) {
+            // Muestra los mensajes durante 5 segundos antes de desvanecer
+            setTimeout(function() {
+              // Inicia el proceso de desvanecimiento
+              flashMessages.style.opacity = 0;
+      
+              // Espera a que la transición de opacidad termine antes de eliminar el nodo
+              flashMessages.addEventListener('transitionend', function() {
+                flashMessages.parentNode.removeChild(flashMessages);
+              });
+            }, 5000); // Tiempo antes de que el mensaje comience a desvanecerse
+          }
+        };
+    </script>
+      
+          
 </body>
 </html>
