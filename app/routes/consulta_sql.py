@@ -1,7 +1,8 @@
 from app import db_connection
 import pandas as pd
-from flask import request,jsonify
+from flask import request,jsonify,Response
 import ast
+from io import BytesIO
 
 
 class ConsultaMain:
@@ -174,6 +175,22 @@ class ConsultaMain:
         # print(search_results)
 
         return df
+    
+    def descargar_excel(self, query, file_name="datos_exportados.xlsx"):
+        # Ejecuta la consulta y obtiene los resultados en un DataFrame
+        df = self.regular_df(query)
+
+        # Convertir el DataFrame a Excel usando un buffer en memoria
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False)
+
+        output.seek(0)  # Regresar al inicio del BytesIO buffer
+
+        # Crear respuesta para descargar
+        response = Response(output.getvalue(), mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response.headers["Content-Disposition"] = f"attachment; filename={file_name}"
+        return response
 
 
     

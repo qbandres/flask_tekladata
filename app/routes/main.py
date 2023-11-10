@@ -1,17 +1,15 @@
-from flask import render_template, session, redirect, url_for, request,Response,flash  
+from flask import render_template, session, redirect, url_for, request,flash  
 from app import app,db_connection
 from .consulta_sql import ConsultaMain
 from .data_processing import DataFrameTransformer
 from .data_graphic import BokehGraph
-from io import BytesIO
-import pandas as pd
 
 
 def generate_graph_data():
     # Crea una instancia de Consulta SQL
     consulta_main = ConsultaMain()
 
-    # Consultas SQL y creación de DataFrames
+    # Consultas SQL y creación de DF
     dataFrame1 = consulta_main.regular_df("""
         SELECT MONTAJE, SUM(WEIGHT) AS WEIGHT 
         FROM tekladata 
@@ -27,7 +25,7 @@ def generate_graph_data():
         ORDER BY YearMonth ASC;
     """)
 
-    # Transformación de los DataFrames
+    # Transformación de los DF
     dataFrameTransformer = DataFrameTransformer()
     df1, df1_acum = dataFrameTransformer.df_xy(dataFrame1, 1000, 'MONTAJE', 'WEIGHT')
     df2, df2acum = dataFrameTransformer.df_xy(dataFrame2, 1000, 'YearMonth', 'TotalWeight')
@@ -70,27 +68,5 @@ def main():
 
 @app.route('/download_excel')
 def download_excel():
-    cursor = db_connection.cursor()
-
-    # Obtener todos los datos de la tabla "tekladata"
-    cursor.execute("SELECT * FROM tekladata")
-    table_data = cursor.fetchall()
-
-    # Convertir los datos a DataFrame de pandas
-    df = pd.DataFrame(table_data, columns=[i[0] for i in cursor.description])
-
-    # Cerrar cursor
-    cursor.close()
-
-    # Convertir el DataFrame a Excel usando un buffer en memoria
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False)
-    
-    output.seek(0)  # Regresar al inicio del BytesIO buffer
-
-    # Crear respuesta para descargar
-    response = Response(output.getvalue(), mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    response.headers["Content-Disposition"] = "attachment; filename=datos_tekladata.xlsx"
-  
-    return response
+    consulta = ConsultaMain()
+    return consulta.descargar_excel("SELECT * FROM tekladata", "datos_tekladata.xlsx")
