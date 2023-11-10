@@ -1,8 +1,8 @@
-
 from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.models import HoverTool,ColumnDataSource,NumeralTickFormatter,Range1d
 from bokeh.models.formatters import DatetimeTickFormatter
+from .data_processing import DataFrameTransformer
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
@@ -12,19 +12,12 @@ class BokehGraph:
         pass
 
     #Solo deb recibir 2 columnas x | y y con los titulos X | Y el x tiene que ser fecha
-    def linear(self,data,fi,ff,ymax,name_x,name_y,title):
-            
-        # Asegurarse de que 'Montaje' sea de tipo datetime
-        data['x'] = pd.to_datetime(data['x'])
+    def linear(self,data,name_x,name_y,title):
+
+        x_start,x_end, y_start, y_end = DataFrameTransformer().max_min(data)
 
         # Convertir el DataFrame a ColumnDataSource para Bokeh
         source = ColumnDataSource(data)
-
-        # Define los rangos para cada eje
-        x_start = pd.to_datetime(fi)
-        x_end = pd.to_datetime(ff)
-        y_start = 0
-        y_end = ymax
 
         # Crear un gráfico con la fecha en el eje x y el peso en el eje y
         p = figure(title=title, 
@@ -59,19 +52,12 @@ class BokehGraph:
         script, div = components(p)
         return script, div
 
-    def scatter(self, data, fi, ff, ymax, name_x, name_y, title):
+    def scatter(self, data,name_x, name_y, title):
         
-        # Asegurarse de que 'x' sea de tipo datetime
-        data['x'] = pd.to_datetime(data['x'])
+        #Funcion que obtiene los maximos y minimos para el grafico  
+        x_start,x_end, y_start, y_end = DataFrameTransformer().max_min(data)
 
-        # Convertir el DataFrame a ColumnDataSource para Bokeh
         source = ColumnDataSource(data)
-
-        # Define los rangos para cada eje
-        x_start = pd.to_datetime(fi)
-        x_end = pd.to_datetime(ff)
-        y_start = 0
-        y_end = ymax
 
         # Crear un gráfico con la fecha en el eje x y el peso en el eje y
         p = figure(title=title, 
@@ -103,25 +89,15 @@ class BokehGraph:
         script, div = components(p)
         return script, div
     
-    def bar_chartMes(self, data, fi, ff, ymax, name_x, name_y, title):
-        
-        # Convertir 'x' a datetime y luego a formato año-mes
-        data['x'] = pd.to_datetime(data['x']).dt.to_period('M').dt.to_timestamp()
+    def bar_chartMes(self, data,name_x, name_y, title):
 
-        # Agrupar por mes y sumar/agregar los valores de 'y'
-        data = data.groupby('x').agg({'y': 'sum'}).reset_index()
+        #Funcion que obtiene los maximos y minimos para el grafico        
+        x_start,x_end, y_start, y_end = DataFrameTransformer().max_min(data)
 
-        # Convertir el DataFrame a ColumnDataSource para Bokeh
         source = ColumnDataSource(data)
 
-        # Define los rangos para cada eje
-        x_start = pd.to_datetime(fi)
-        x_end = pd.to_datetime(ff)
-        y_start = 0
-        y_end = ymax
-
         # Crear un gráfico...
-        p = figure(title=title, 
+        p = figure(title=title,     
                 x_axis_label=name_x, 
                 y_axis_label=name_y,
                 x_axis_type='datetime',
@@ -150,16 +126,13 @@ class BokehGraph:
         script, div = components(p)
         return script, div
     
-    def bar_chartDia(self, data, fi, ff, ymax, name_x, name_y, title):
+    def bar_chartDia(self, data,name_x, name_y, title):
+
+        #Funcion que obtiene los maximos y minimos para el grafico  
+        x_start,x_end, y_start, y_end = DataFrameTransformer().max_min(data)
         
         # Convertir el DataFrame a ColumnDataSource para Bokeh
         source = ColumnDataSource(data)
-
-        # Define los rangos para cada eje
-        x_start = pd.to_datetime(fi)
-        x_end = pd.to_datetime(ff)
-        y_start = 0
-        y_end = ymax
 
         # Crear un gráfico...
         p = figure(title=title, 

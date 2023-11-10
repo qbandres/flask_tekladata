@@ -29,7 +29,7 @@ def get_select_data():
     
     brutoDiario,brutoAcum = transform.df_xy(df_acum,1000,'MONTAJE','WEIGHT')
 
-    scriptBrut, divBrut = bokehGraph.linear(brutoAcum, '2019-10-01', '2023-03-30', 10000, 'Date', 'Ton', 'Montaje Acumulado Variación Linear')
+    scriptBrut, divBrut = bokehGraph.linear(brutoAcum,'Date', 'Ton', 'Montaje Acumulado Variación Linear')
     
     # Asegúrate de que todas las variables que usas en tu plantilla estén definidas
 
@@ -88,7 +88,7 @@ def graphic_dash():
         transform = DataFrameTransformer()
         brutoDiario,brutoAcum = transform.df_xy(df_acum,1000,'MONTAJE','WEIGHT')
 
-        scriptBrut, divBrut = bokehGraph.linear(brutoAcum, '2019-10-01', '2023-03-30', 10000, 'Date', 'Ton', 'Montaje Acumulado Variación Linear')
+        scriptBrut, divBrut = bokehGraph.linear(brutoAcum,'Date', 'Ton', 'Montaje Acumulado Variación Linear')
     
 
 

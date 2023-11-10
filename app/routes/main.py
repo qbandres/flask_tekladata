@@ -32,9 +32,9 @@ def generate_graph_data():
 
     # Creación de gráficos con Bokeh
     bokehGraph = BokehGraph()
-    script1, div1 = bokehGraph.scatter(df1, '2019-10-01', '2023-03-30', 90, 'Date', 'Ton', 'Montaje Diario Variación Scatter')
-    script2, div2 = bokehGraph.linear(df1_acum, '2019-10-01', '2023-03-30', 10000, 'Date', 'Ton', 'Montaje Acumulado Variación Linear')
-    script3, div3 = bokehGraph.bar_chartMes(df2, '2019-10-01', '2023-03-30', 700, 'Date', 'Ton', 'Montaje Mensual Variación bar_chart')
+    script1, div1 = bokehGraph.scatter(df1,'Date', 'Ton', 'Montaje Diario Variación Scatter')
+    script2, div2 = bokehGraph.linear(df1_acum,'Date', 'Ton', 'Montaje Acumulado Variación Linear')
+    script3, div3 = bokehGraph.bar_chartMes(df2,'Date', 'Ton', 'Montaje Mensual Variación bar_chart')
 
     return script1, div1, script2, div2, script3, div3
 
