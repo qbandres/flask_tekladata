@@ -92,5 +92,5 @@ def download_excel():
     # Crear respuesta para descargar
     response = Response(output.getvalue(), mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response.headers["Content-Disposition"] = "attachment; filename=datos_tekladata.xlsx"
-    
+  
     return response
