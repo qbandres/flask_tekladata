@@ -21,9 +21,9 @@ def anadir_elemento():
 
         # Inicia una nueva operación en la base de datos.
         cursor = db_connection.cursor()
-        # Prepara la consulta SQL para insertar datos en la tabla 'tekladata'.
+        # Prepara la consulta SQL para insertar datos en la tabla 'est_tekladata'.
         query = """
-        INSERT INTO tekladata (ID, PIECEMARK, ESP, LINEA, CLASS, QTY, WEIGHT, RATIO, ZONA, TRASLADO, PRE_ENSAMBLE, MONTAJE, TORQUE, PUNCH)
+        INSERT INTO est_tekladata (ID, PIECEMARK, ESP, LINEA, CLASS, QTY, WEIGHT, RATIO, ZONA, TRASLADO, PRE_ENSAMBLE, MONTAJE, TORQUE, PUNCH)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NULL, NULL, NULL, NULL, NULL);
         """
 

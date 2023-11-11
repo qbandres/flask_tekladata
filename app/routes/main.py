@@ -12,14 +12,14 @@ def generate_graph_data():
     # Consultas SQL y creación de DF
     dataFrame1 = consulta_main.regular_df("""
         SELECT MONTAJE, SUM(WEIGHT) AS WEIGHT 
-        FROM tekladata 
+        FROM est_tekladata 
         WHERE MONTAJE IS NOT NULL AND MONTAJE <> '0000-00-00' AND MONTAJE <> '' 
         GROUP BY MONTAJE 
         ORDER BY MONTAJE;
     """)
     dataFrame2 = consulta_main.regular_df("""
         SELECT DATE_FORMAT(MONTAJE, '%Y-%m') AS YearMonth, SUM(WEIGHT) AS TotalWeight 
-        FROM tekladata 
+        FROM est_tekladata 
         WHERE MONTAJE IS NOT NULL AND MONTAJE <> '0000-00-00' AND MONTAJE <> '' 
         GROUP BY YearMonth 
         ORDER BY YearMonth ASC;
@@ -56,7 +56,7 @@ def main():
             consulta_main = ConsultaMain()
             search_type = request.form['search_type_main']
             search_filter = request.form['search_filter_main']
-            search_main_table = consulta_main.regular_fetchall(f"SELECT * FROM tekladata WHERE {search_type} LIKE %s", (f"%{search_filter}%",))
+            search_main_table = consulta_main.regular_fetchall(f"SELECT * FROM est_tekladata WHERE {search_type} LIKE %s", (f"%{search_filter}%",))
         except Exception as e:
             # Aquí se captura la excepción general y se muestra un mensaje al usuario
             # Deberías capturar excepciones más específicas según lo que pueda salir mal
@@ -69,4 +69,4 @@ def main():
 @app.route('/download_excel')
 def download_excel():
     consulta = ConsultaMain()
-    return consulta.descargar_excel("SELECT * FROM tekladata", "datos_tekladata.xlsx")
+    return consulta.descargar_excel("SELECT * FROM est_tekladata", "datos_est_tekladata.xlsx")

@@ -59,7 +59,7 @@ class ConsultaMain:
         
         # Aquí asumimos que deseas buscar coincidencias en la columna 'piecemark'
         cursor = db_connection.cursor()
-        query = "SELECT * FROM tekladata WHERE PIECEMARK LIKE %s"
+        query = "SELECT * FROM est_tekladata WHERE PIECEMARK LIKE %s"
         cursor.execute(query, ('%' + search_filter + '%',))
         resultados = cursor.fetchall()
         cursor.close()
@@ -129,7 +129,7 @@ class ConsultaMain:
             conditions.append(f"ZONA IN ({', '.join(['%s'] * len(search_filter4))})")
             params.extend(search_filter4)
 
-        query = "SELECT * FROM tekladata"
+        query = "SELECT * FROM est_tekladata"
 
         # Añadir las condiciones a la consulta si existen
         if conditions:

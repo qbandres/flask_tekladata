@@ -6,7 +6,7 @@ from .consulta_sql import ConsultaMain
 @app.route('/agregar_montaje')
 def agregar_montaje():
     cursor = db_connection.cursor()
-    cursor.execute("SELECT id, piecemark, esp, linea, class, qty, weight, ratio, zona FROM tekladata WHERE ID = 1")
+    cursor.execute("SELECT id, piecemark, esp, linea, class, qty, weight, ratio, zona FROM est_tekladata WHERE ID = 1")
     datos_estaticos = cursor.fetchone()
     cursor.close()
 
@@ -28,7 +28,7 @@ def actualizar_montaje():
 
         cursor = db_connection.cursor()
         query = """
-            UPDATE tekladata SET 
+            UPDATE est_tekladata SET 
                 TRASLADO = %s, 
                 PRE_ENSAMBLE = %s, 
                 MONTAJE = %s, 
